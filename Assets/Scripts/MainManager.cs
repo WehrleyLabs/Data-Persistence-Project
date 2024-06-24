@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class MainManager : MonoBehaviour
 {
+    public static MainManager Instance;
+
+    public string yourName;
+
+    public int highScore;
+
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
@@ -18,7 +25,21 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        LoadName();
+        LoadHighScore();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,4 +94,26 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    [System.Serializable]
+
+    class SaveData
+    {
+        public string YourName;
+        public int highScore;
+    }
+
+    public void LoadName()
+    {
+
+    }
+
+    public void LoadHighScore()
+    {
+        SaveData data = new SaveData();
+        data.yourName = yourName;
+
+    }
+
+
 }
